@@ -21,8 +21,7 @@ import {
 } from "@/lib/shared/types";
 
 /**
- * Thèmes de Flexdesign : tables design_themes, design_theme_colors, design_theme_fonts (migration
- * 20261006120000_flexdesign_themes.sql de flexstaff). Lecture publique, écriture admin : la RLS décide,
+ * Thèmes de Flexdesign : tables design_themes, design_theme_colors, design_theme_fonts (supabase/init.sql). Lecture publique, écriture admin : la RLS décide,
  * avec le jeton du compte.
  */
 

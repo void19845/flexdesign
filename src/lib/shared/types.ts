@@ -1,6 +1,6 @@
 /**
  * Contrat entre l'API de Flexdesign (src/app/api) et l'interface (src/components).
- * Les droits sont ceux de la suite (app_roles, appli 'flexdesign') : voir les migrations du dépôt flexstaff.
+ * Les droits sont ceux de la suite (app_roles, appli 'flexdesign') : voir supabase/init.sql de flexstaff et de ce dépôt.
  */
 
 /** Rôle dans Flexdesign (un super admin de la suite est admin) */

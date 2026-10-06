@@ -11,7 +11,7 @@ supprimé, base injoignable), garde son apparence à elle. Flexdesign ne dépend
 
 - Appli Next.js 16 sur le modèle de Flexform / Flexstaff : route handlers, client REST Supabase sans
   dépendance, CSS global, CSP avec nonce, port 8788.
-- Inscription `flexdesign` dans `suite_apps` (migration flexstaff) : admins et staff gérés dans Flexstaff.
+- Inscription `flexdesign` dans `suite_apps` (`supabase/init.sql`) : admins et staff gérés dans Flexstaff.
 - Connexion réservée aux rôles `admin` / `staff` de Flexdesign, relus à chaque requête.
 - Tests : `scripts/e2e.mjs` (connexion, refus) et deux vérifications dans `npm run test:rls` de flexstaff.
 
@@ -47,7 +47,7 @@ appli liée choisit le sien.
 
 État des liens existants :
 
-- **Flexform ne se lie plus à Flexfolio** (retrait en cours : code Flexform + migration flexstaff qui
+- **Flexform ne se lie plus à Flexfolio** (fait : code Flexform + son `supabase/init.sql`, qui
   supprime `sondage_settings.theme_linked`). Flexform garde son thème BDE, puis pourra se lier à un
   thème Flexdesign.
 - Flexfolio garde son propre éditeur de palette et de polices (`site_settings`), inchangé.
@@ -106,7 +106,7 @@ But : produire des visuels à partir de modèles. **A4 d'abord**, export **PDF**
 Un moodboard n'est visible que par son propriétaire et ceux avec qui il l'a partagé : être admin de
 Flexdesign (ou super admin de la suite) ne donne aucun accès aux moodboards des autres.
 
-Chaque règle arrive avec sa migration dans flexstaff et au moins un cas refusé dans `npm run test:rls`.
+Chaque règle arrive dans `supabase/init.sql` avec au moins un cas refusé dans `npm run test:rls`.
 
 ## Questions ouvertes
 
