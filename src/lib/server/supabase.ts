@@ -8,7 +8,7 @@ import { HttpError } from "./errors";
  * Deux façons de parler à la base :
  *   serviceDb()     clé service_role, ignore la RLS. Réservée à la limite de tentatives de connexion.
  *   userDb(jeton)   jeton du compte admin ou staff connecté : la RLS de la base décide de ce
- *                   qu'il peut lire ou modifier (migrations dans le dépôt flexstaff).
+ *                   qu'il peut lire ou modifier (supabase/init.sql).
  */
 
 export interface SupabaseConfig {

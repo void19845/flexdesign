@@ -7,7 +7,7 @@ import { MAX_FONT_BYTES, type CatalogFont, type Font, type FontFile, type FontSt
 
 /**
  * Polices de Flexdesign : tables design_fonts et design_font_files, fichiers dans le bucket public
- * design-fonts (migration 20261006120000_flexdesign_themes.sql de flexstaff). Les navigateurs ne
+ * design-fonts (supabase/init.sql). Les navigateurs ne
  * contactent jamais Google : les fichiers du catalogue sont copiés une fois dans le bucket.
  */
 

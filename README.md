@@ -15,8 +15,7 @@ sont décrits dans [PLAN.md](PLAN.md).
 
 ## Droits
 
-Flexdesign est inscrite dans `suite_apps` sous le nom `flexdesign` (migration
-`20261005120000_flexdesign.sql` de flexstaff). Un compte entre s'il a le rôle `admin` ou `staff` pour
+Flexdesign est inscrite dans `suite_apps` sous le nom `flexdesign` (`supabase/init.sql`). Un compte entre s'il a le rôle `admin` ou `staff` pour
 `flexdesign` dans `app_roles`, ou s'il est super admin de la suite. Les rôles se donnent depuis Flexstaff
 ou avec `npm run role -- prenom.nom@exemple.fr flexdesign staff` dans flexstaff.
 
@@ -45,7 +44,7 @@ Les fichiers sont copiés dans le bucket public `design-fonts` de Supabase (sous
 pour le catalogue) : les navigateurs ne contactent jamais Google. Le nom de famille CSS d'une police envoyée est
 généré (`Flexdesign xxxxxxxx`), jamais le texte saisi. Une police utilisée par un thème ne peut pas être supprimée.
 
-Droits (migration `20261006120000_flexdesign_themes.sql` de flexstaff) : tout le monde lit les thèmes et les
+Droits (`supabase/init.sql`) : tout le monde lit les thèmes et les
 polices, y compris sans compte ; seuls les admins Flexdesign (et super admins) les modifient. Le staff voit les
 thèmes en lecture seule.
 
@@ -77,8 +76,9 @@ En local, le `.env` de flexstaff convient tel quel.
 
 ## Lancer
 
-Base locale démarrée dans flexstaff (`npm run db:start`, Docker Desktop doit tourner), migrations
-appliquées (`npm run db:reset` si la base existait déjà avant la migration Flexdesign), puis :
+Base locale démarrée dans flexstaff (`npm run db:start`, Docker Desktop doit tourner), schéma
+à jour (`npm run db:setup` dans flexstaff applique à la base en place `supabase/init.sql` de flexstaff puis celui de
+chaque appli, dont ce dépôt), puis :
 
 ```bash
 npm install
