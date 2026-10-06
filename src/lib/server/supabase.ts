@@ -127,6 +127,37 @@ export class Db {
     const res = await this.request(`rpc/${fn}`, { method: "POST", body: args });
     return (await res.json()) as T;
   }
+
+  // --- Storage : mêmes droits (jeton du compte, règles sur storage.objects) ---
+
+  private async storage(path: string, init: { method: string; body: BodyInit; headers: Record<string, string> }): Promise<void> {
+    const res = await fetch(`${this.base}/storage/v1/object/${path}`, {
+      ...init,
+      headers: { apikey: this.apikey, Authorization: `Bearer ${this.bearer}`, ...init.headers },
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!res.ok) {
+      const err = (await res.json().catch(() => ({}))) as { message?: string };
+      const message = err.message ?? `Erreur Supabase Storage ${res.status}`;
+      // Storage répond 400 quand une règle RLS refuse l'écriture
+      throw new DbError(/row-level security/i.test(message) ? 403 : res.status, "", message);
+    }
+  }
+
+  /** Envoie (ou remplace) un fichier dans un bucket. */
+  async upload(bucket: string, path: string, body: Uint8Array<ArrayBuffer>, contentType: string): Promise<void> {
+    await this.storage(`${bucket}/${path}`, { method: "POST", body, headers: { "Content-Type": contentType, "x-upsert": "true" } });
+  }
+
+  async removeFiles(bucket: string, paths: string[]): Promise<void> {
+    if (!paths.length) return;
+    await this.storage(bucket, { method: "DELETE", body: JSON.stringify({ prefixes: paths }), headers: { "Content-Type": "application/json" } });
+  }
+}
+
+/** Adresse de Supabase vue par les navigateurs (fichiers publics) : NEXT_PUBLIC_SUPABASE_URL, sinon SUPABASE_URL. */
+export function publicSupabaseUrl(): string {
+  return (process.env.NEXT_PUBLIC_SUPABASE_URL ?? supabaseConfig().url).replace(/\/+$/, "");
 }
 
 export function serviceDb(): Db {

@@ -15,7 +15,7 @@ supprimé, base injoignable), garde son apparence à elle. Flexdesign ne dépend
 - Connexion réservée aux rôles `admin` / `staff` de Flexdesign, relus à chaque requête.
 - Tests : `scripts/e2e.mjs` (connexion, refus) et deux vérifications dans `npm run test:rls` de flexstaff.
 
-## 1. Thèmes
+## 1. Thèmes (fait)
 
 But : des thèmes riches (couleurs, polices) que chaque appli **peut** adopter. Plusieurs thèmes : chaque
 appli liée choisit le sien.
@@ -38,7 +38,7 @@ appli liée choisit le sien.
   les premiers octets, nom de fichier et nom de famille générés (jamais le texte saisi), case
   obligatoire « je détiens la licence » (les polices commerciales interdisent souvent l'usage web ou PDF).
 - tables `design_themes`, `design_theme_colors`, `design_theme_fonts`, `design_fonts` (catalogue copié
-  et polices envoyées), lisibles par tous (anon, pour les applis qui s'y lient), modifiables par les
+  et polices envoyées) et `design_font_files` (un fichier par graisse, style et sous-ensemble), lisibles par tous (anon, pour les applis qui s'y lient), modifiables par les
   admins Flexdesign.
 - éditeur dans Flexdesign avec aperçu ; aucune valeur brute (`url()`, `@import`) ne passe dans du CSS.
 - dans chaque appli, plus tard et dans son propre dépôt : un réglage d'admin « lier à un thème
@@ -110,4 +110,4 @@ Chaque règle arrive avec sa migration dans flexstaff et au moins un cas refusé
 
 ## Questions ouvertes
 
-Aucune pour l'instant : le plan est validé. Prochaine étape, le volet 1 (thèmes).
+Aucune pour l'instant : le plan est validé. Prochaine étape, le volet 2 (moodboards).
