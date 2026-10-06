@@ -1,0 +1,113 @@
+:root {
+  --ink: #1F1A3D;
+  --muted: #6B6690;
+  --dark: #2A1B5E;
+  --violet: #5B3FD9;
+  --pink: #FF5C8A;
+  --yellow: #FFC93C;
+  --bg: #F6F4FF;
+  --card: #FFFFFF;
+  --line: #E4E0F5;
+  --danger: #D93A5F;
+  --radius: 16px;
+  --shadow: 0 2px 10px rgba(42, 27, 94, 0.08);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { margin: 0 0 12px; line-height: 1.2; color: var(--dark); }
+h1 { font-size: 1.6rem; }
+h2 { font-size: 1.15rem; }
+p { margin: 0 0 12px; }
+.muted { color: var(--muted); }
+.small { font-size: 0.85rem; }
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+/* --- Formulaires & boutons --- */
+
+.field { display: block; margin-bottom: 14px; }
+.field > span { display: block; margin-bottom: 6px; font-size: 0.85rem; font-weight: 600; color: var(--muted); }
+
+input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+input:focus { outline: none; border-color: var(--violet); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--dark);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s, filter 0.15s;
+}
+.btn:hover:not(:disabled) { filter: brightness(0.96); }
+.btn:active:not(:disabled) { transform: scale(0.98); }
+.btn:disabled { cursor: default; opacity: 0.55; }
+.btn:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+.btn.primary { background: var(--violet); color: #fff; }
+.btn.ghost { background: transparent; box-shadow: inset 0 0 0 2px var(--line); }
+.btn.small { padding: 6px 12px; font-size: 0.85rem; }
+.btn.big { width: 100%; padding: 14px; font-size: 1.05rem; }
+
+.error { min-height: 1.2em; color: var(--danger); font-size: 0.9rem; }
+
+/* --- Pages --- */
+
+.page-admin { max-width: 1180px; margin: 0 auto; padding: 20px 16px 60px; }
+.narrow { max-width: 440px; margin: 0 auto; }
+.login { margin-top: 12vh; }
+.login h1 { font-size: 1.8rem; }
+
+.topbar { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+.topbar h1 { margin: 0; }
+.topbar-actions { display: flex; gap: 8px; align-items: center; }
+
+.badge {
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.badge.role-admin { background: #EDE8FF; color: var(--violet); }
+.badge.role-staff { background: var(--bg); color: var(--muted); }
