@@ -9,12 +9,15 @@ import { NextResponse, type NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const isDev = process.env.NODE_ENV === "development";
+  // Polices des thèmes : bucket public design-fonts de Supabase (adresse vue par le navigateur)
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL;
+  const fontHost = supabaseUrl ? ` ${new URL(supabaseUrl).origin}` : "";
   const csp = [
     "default-src 'self'",
     // En développement, React a besoin d'eval pour ses messages d'erreur, et le rechargement à chaud passe par une websocket
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ""}`,
     "style-src 'self' 'unsafe-inline'",
-    "font-src 'self'",
+    `font-src 'self'${fontHost}`,
     "img-src 'self' data: blob:",
     `connect-src 'self'${isDev ? " ws:" : ""}`,
     "object-src 'none'",

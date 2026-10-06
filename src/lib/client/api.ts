@@ -25,6 +25,14 @@ export function post<T = unknown>(path: string, body?: unknown, method = "POST")
   return api<T>(path, { method, body: body === undefined ? undefined : JSON.stringify(body) });
 }
 
+/** POST multipart (FormData) : sans Content-Type, le navigateur ajoute lui-même la frontière. */
+export async function postForm<T = unknown>(path: string, form: FormData): Promise<T> {
+  const res = await fetch(path, { method: "POST", body: form });
+  const data = (await res.json().catch(() => ({}))) as T & { error?: string };
+  if (!res.ok) throw new ApiError(res.status, data.error ?? `Erreur ${res.status}`);
+  return data;
+}
+
 /** Session refusée (401) ou accès retiré (403). */
 export function isAuthError(err: unknown): err is ApiError {
   return err instanceof ApiError && (err.status === 401 || err.status === 403);

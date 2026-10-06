@@ -177,3 +177,4 @@ export async function requireRole(req: Request, roles: Role[]): Promise<AccountC
 }
 
 export const requireStaff = (req: Request): Promise<AccountContext> => requireRole(req, ["admin", "staff"]);
+export const requireAdmin = (req: Request): Promise<AccountContext> => requireRole(req, ["admin"]);

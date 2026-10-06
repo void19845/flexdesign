@@ -35,7 +35,7 @@ export function DesignApp() {
   }, []);
 
   if (view.name === "loading") return null;
-  if (view.name === "panel") return <HomePanel account={view.me} onSignedOut={() => setView(toLogin(""))} />;
+  if (view.name === "panel") return <HomePanel account={view.me} onSignedOut={(m) => setView(toLogin(m ?? ""))} />;
   return (
     <div className="narrow">
       <LoginForm key={view.id} message={view.message} onSignedIn={(me) => setView({ name: "panel", me })} />
