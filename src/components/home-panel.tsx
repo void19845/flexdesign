@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { BoardsPanel } from "@/components/boards-panel";
 import { FontsPanel } from "@/components/fonts-panel";
 import { ThemesPanel } from "@/components/themes-panel";
 import { signOut } from "@/lib/client/account";
 import { api, isAuthError } from "@/lib/client/api";
 import type { Font, Me, Theme } from "@/lib/shared/types";
 
-type Tab = "themes" | "fonts";
+type Tab = "themes" | "boards" | "fonts";
 
-/** Accueil du compte connecté : thèmes (lecture seule pour le staff) et polices (admin). Voir PLAN.md. */
+/** Accueil du compte connecté : thèmes (lecture seule pour le staff), moodboards et polices (admin). Voir PLAN.md. */
 export function HomePanel({ account, onSignedOut }: { account: Me; onSignedOut: (message?: string) => void }) {
   const [pending, setPending] = useState(false);
   const [tab, setTab] = useState<Tab>("themes");
@@ -60,6 +61,9 @@ export function HomePanel({ account, onSignedOut }: { account: Me; onSignedOut: 
         <button type="button" className="btn tab" role="tab" aria-selected={tab === "themes"} onClick={() => setTab("themes")}>
           Thèmes
         </button>
+        <button type="button" className="btn tab" role="tab" aria-selected={tab === "boards"} onClick={() => setTab("boards")}>
+          Moodboards
+        </button>
         {isAdmin && (
           <button type="button" className="btn tab" role="tab" aria-selected={tab === "fonts"} onClick={() => setTab("fonts")}>
             Polices
@@ -76,6 +80,9 @@ export function HomePanel({ account, onSignedOut }: { account: Me; onSignedOut: 
           {/* Onglets gardés montés : un brouillon en cours n'est pas perdu en changeant d'onglet */}
           <div hidden={tab !== "themes"}>
             <ThemesPanel themes={themes} fonts={fonts} canEdit={isAdmin} onThemesChange={setThemes} onAuthError={onSignedOut} />
+          </div>
+          <div hidden={tab !== "boards"}>
+            <BoardsPanel onAuthError={onSignedOut} />
           </div>
           {isAdmin && (
             <div hidden={tab !== "fonts"}>

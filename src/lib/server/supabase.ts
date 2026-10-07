@@ -5,10 +5,12 @@ import { HttpError } from "./errors";
 /**
  * Accès à Supabase par son API REST (PostgREST), sans dépendance.
  *
- * Deux façons de parler à la base :
- *   serviceDb()     clé service_role, ignore la RLS. Réservée à la limite de tentatives de connexion.
+ * Trois façons de parler à la base :
+ *   serviceDb()     clé service_role, ignore la RLS. Réservée à la limite de tentatives de connexion et à
+ *                   la lecture des images d'un moodboard par lien public, une fois le jeton vérifié en base.
  *   userDb(jeton)   jeton du compte admin ou staff connecté : la RLS de la base décide de ce
  *                   qu'il peut lire ou modifier (supabase/init.sql).
+ *   anonDb()        visiteur sans compte (lien public d'un moodboard).
  */
 
 export interface SupabaseConfig {
@@ -144,9 +146,18 @@ export class Db {
     }
   }
 
-  /** Envoie (ou remplace) un fichier dans un bucket. */
-  async upload(bucket: string, path: string, body: Uint8Array<ArrayBuffer>, contentType: string): Promise<void> {
-    await this.storage(`${bucket}/${path}`, { method: "POST", body, headers: { "Content-Type": contentType, "x-upsert": "true" } });
+  /** Envoie un fichier dans un bucket ; upsert : remplace un fichier existant (demande aussi le droit de modifier). */
+  async upload(bucket: string, path: string, body: Uint8Array<ArrayBuffer>, contentType: string, upsert = true): Promise<void> {
+    await this.storage(`${bucket}/${path}`, { method: "POST", body, headers: { "Content-Type": contentType, "x-upsert": String(upsert) } });
+  }
+
+  /** Lit un fichier d'un bucket privé ; null s'il est absent ou refusé. */
+  async download(bucket: string, path: string): Promise<Response | null> {
+    const res = await fetch(`${this.base}/storage/v1/object/authenticated/${bucket}/${path}`, {
+      headers: { apikey: this.apikey, Authorization: `Bearer ${this.bearer}` },
+      signal: AbortSignal.timeout(15000),
+    });
+    return res.ok ? res : null;
   }
 
   async removeFiles(bucket: string, paths: string[]): Promise<void> {
@@ -168,6 +179,11 @@ export function serviceDb(): Db {
 export function userDb(accessToken: string): Db {
   const cfg = supabaseConfig();
   return new Db(cfg.url, cfg.anonKey, accessToken);
+}
+
+export function anonDb(): Db {
+  const cfg = supabaseConfig();
+  return new Db(cfg.url, cfg.anonKey, cfg.anonKey);
 }
 
 /** Traduit une erreur de base en message pour l'utilisateur. */
