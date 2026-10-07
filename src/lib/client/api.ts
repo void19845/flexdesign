@@ -33,6 +33,14 @@ export async function postForm<T = unknown>(path: string, form: FormData): Promi
   return data;
 }
 
+/**
+ * Session refusée (401) seulement. Pour les moodboards, un 403 est souvent un simple refus (lecture seule,
+ * réservé au propriétaire) : il s'affiche comme une erreur sans renvoyer à la connexion.
+ */
+export function isSessionError(err: unknown): err is ApiError {
+  return err instanceof ApiError && err.status === 401;
+}
+
 /** Session refusée (401) ou accès retiré (403). */
 export function isAuthError(err: unknown): err is ApiError {
   return err instanceof ApiError && (err.status === 401 || err.status === 403);

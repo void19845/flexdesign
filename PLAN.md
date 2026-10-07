@@ -52,20 +52,21 @@ appli liée choisit le sien.
   thème Flexdesign.
 - Flexfolio garde son propre éditeur de palette et de polices (`site_settings`), inchangé.
 
-## 2. Moodboards
+## 2. Moodboards (fait)
 
 But : rassembler des images de référence. Chaque moodboard est **personnel** et peut être partagé.
 
 - tables `design_boards` (titre, description, propriétaire) et `design_board_items` (tableau, image,
-  note, position ; `on delete cascade` vers le tableau) ;
+  note, position sur une toile libre : x, y, largeur, ordre d'empilement ; `on delete cascade` vers le tableau) ;
 - partage, au choix du propriétaire, cumulable :
   - avec des membres choisis de l'équipe Flexdesign, en lecture ou en modification
     (table `design_board_members`) ;
   - avec toute l'équipe Flexdesign, en lecture (un interrupteur sur le tableau) ;
   - par lien public en lecture seule, sans compte : jeton secret aléatoire, révocable et
-    régénérable, page publique non indexée ;
+    régénérable, page publique non indexée (table `design_board_links`, lisible par le seul propriétaire) ;
 - bucket Storage privé `design-assets`, règles sur `storage.objects` qui suivent les droits du tableau.
-  Pour le lien public, le serveur vérifie le jeton dans la base puis sert des URL signées de courte durée ;
+  Toutes les images passent par une route `/api` du même site (équipe avec son propre jeton ; lien public :
+  jeton vérifié dans la base, puis fichier lu par le serveur) : la CSP garde `img-src 'self'` ;
 - images envoyées dans le bucket uniquement : pas d'images externes, pour garder la CSP stricte.
 
 Ce volet pose le circuit d'envoi d'images (taille, type, nom de fichier) réutilisé par le studio.
@@ -110,4 +111,4 @@ Chaque règle arrive dans `supabase/init.sql` avec au moins un cas refusé dans 
 
 ## Questions ouvertes
 
-Aucune pour l'instant : le plan est validé. Prochaine étape, le volet 2 (moodboards).
+Aucune pour l'instant : le plan est validé. Prochaine étape, le volet 3 (studio).
